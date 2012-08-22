@@ -9,7 +9,7 @@ using Pash.ParserIntrinsics;
 namespace ParserTests
 {
     [TestFixture]
-    class PowerShellGrammarLexicalPatternsTests
+    public class PowerShellGrammarLexicalPatternsTests
     {
         [Test]
         public void LetterAsTokenChar()
