@@ -256,12 +256,16 @@ namespace Pash.ParserIntrinsics
             ////            real_literal
             ////            string_literal
             public static readonly RegexBasedTerminal literal = null; // Initialized by reflection.
-            const string literal_pattern = "(?<literal>" + string_literal_pattern + ")";
+            const string literal_pattern = "(?<literal>" + "(" + string_literal_pattern + ")|(" + integer_literal_pattern + ")" + ")";
 
             #region Integer Literals
             ////        integer_literal:
             ////            decimal_integer_literal
             ////            hexadecimal_integer_literal
+            // TODO: more
+            public static readonly RegexBasedTerminal integer_literal = null; // Initialized by reflection
+            const string integer_literal_pattern = "(?<integer_literal>" + decimal_integer_literal_pattern + ")";
+
             ////        decimal_integer_literal:
             ////            decimal_digits   numeric_type_suffix_opt   numeric_multiplier_opt
             // TODO: more
