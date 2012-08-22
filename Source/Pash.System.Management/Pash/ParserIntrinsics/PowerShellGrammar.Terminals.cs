@@ -264,11 +264,21 @@ namespace Pash.ParserIntrinsics
             ////            hexadecimal_integer_literal
             ////        decimal_integer_literal:
             ////            decimal_digits   numeric_type_suffix_opt   numeric_multiplier_opt
+            // TODO: more
+            public static readonly RegexBasedTerminal decimal_integer_literal = null; // Initialized by reflection
+            const string decimal_integer_literal_pattern = "(?<decimal_integer_literal>" + decimal_digits_pattern + ")";
+
             ////        decimal_digits:
             ////            decimal_digit
             ////            decimal_digit   decimal_digits
+            public static readonly RegexBasedTerminal decimal_digits = null; // Initialized by reflection
+            const string decimal_digits_pattern = "(?<decimal_digits>" + "(" + decimal_digit_pattern + ")+" + ")";
+
             ////        decimal_digit:   one of
             ////            0   1   2   3   4   5   6   7   8   9
+            public static readonly RegexBasedTerminal decimal_digit = null; // Initialized by reflection
+            const string decimal_digit_pattern = "(?<decimal_digit>" + "[0123456789]" + ")";
+
             ////        numeric_type_suffix:
             ////            long_type_suffix
             ////            decimal_type_suffix
