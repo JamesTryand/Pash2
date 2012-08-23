@@ -32,7 +32,7 @@ namespace ParserTests
         [Test]
         public void GenericToken_Match()
         {
-            Assert.IsTrue(Regex.IsMatch("foo", "^" + PowerShellGrammar.Terminals.generic_token.Pattern + "$"));
+            AssertIsFullStringMatch(PowerShellGrammar.Terminals.generic_token.Pattern, "foo");
         }
 
         [Test]
@@ -41,6 +41,7 @@ namespace ParserTests
             Assert.IsFalse(Regex.IsMatch("foo foo", "^" + PowerShellGrammar.Terminals.generic_token.Pattern + "$"));
         }
 
+        // make sure we don't see string literals as `generic_token`.
         [Test]
         public void GenericToken_String_NotMatch()
         {
@@ -84,7 +85,15 @@ namespace ParserTests
         [Test]
         public void TokenizeStringTest()
         {
-            StringAssert.IsMatch("^" + PowerShellGrammar.Terminals.string_literal.Pattern + "$", "\"PS> \"");
+            AssertIsFullStringMatch(PowerShellGrammar.Terminals.string_literal.Pattern, "\"PS> \"");
+        }
+
+        // Use this to confirm that the regex matches greedily enough.
+        static void AssertIsFullStringMatch(string pattern, string input)
+        {
+            var matches = new Regex(pattern).Match(input);
+            Assert.True(matches.Success, "failed to match '{0}' to '{1}'", pattern, input);
+            Assert.AreEqual(input, matches.Value, "failed to match the entire input");
         }
     }
 }
