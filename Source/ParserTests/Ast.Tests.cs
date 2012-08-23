@@ -58,6 +58,7 @@ namespace ParserTests
             Assert.IsNotNull(parseTree);
             Assert.IsFalse(parseTree.HasErrors, parseTree.ParserMessages.JoinString("\n"));
 
+            // TODO: Find a better example of executing a cmdlet in parens, with a reliable output
             //var result = ((_node)parseTree.Root.AstNode).GetValue(null);
 
             //Assert.IsInstanceOf<string>(result);
@@ -77,7 +78,7 @@ namespace ParserTests
 
             var result = ((_node)parseTree.Root.AstNode).GetValue(null);
 
-            Assert.IsInstanceOf<int>(result);
+            Assert.IsInstanceOf<int>(result, "Result is '{0}'", result);
             Assert.AreEqual(7, result);
         }
 
@@ -94,7 +95,7 @@ namespace ParserTests
 
             var result = ((_node)parseTree.Root.AstNode).GetValue(null);
 
-            Assert.IsInstanceOf<int>(result);
+            Assert.IsInstanceOf<int>(result, "Result is '{0}'", result);
             Assert.AreEqual(10, result);
         }
 
@@ -111,7 +112,7 @@ namespace ParserTests
 
             var result = ((_node)parseTree.Root.AstNode).GetValue(null);
 
-            Assert.IsInstanceOf<int>(result);
+            Assert.IsInstanceOf<int>(result, "Result is '{0}'", result);
             Assert.AreEqual(17, result);
         }
     }

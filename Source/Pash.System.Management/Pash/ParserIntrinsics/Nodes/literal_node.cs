@@ -31,8 +31,17 @@ namespace Pash.ParserIntrinsics.Nodes
 
             Debug.Assert(matches.Success);
 
-            // TODO: throw if a NYI type of literal
-            return matches.Groups[PowerShellGrammar.Terminals.verbatim_string_characters.Name].Value;
+            if (matches.Groups[PowerShellGrammar.Terminals.verbatim_string_characters.Name].Success)
+            {
+                return matches.Groups[PowerShellGrammar.Terminals.verbatim_string_characters.Name].Value;
+            }
+
+            if (matches.Groups[PowerShellGrammar.Terminals.decimal_integer_literal.Name].Success)
+            {
+                return int.Parse(matches.Groups[PowerShellGrammar.Terminals.decimal_integer_literal.Name].Value);
+            }
+
+            throw new NotImplementedException("unrecognized literal '" + matches.Value + "'");
         }
     }
 }
