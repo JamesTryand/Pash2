@@ -229,8 +229,9 @@
     <Compile Include="Pash\ParserIntrinsics\Nodes\additive_expression_node.cs" />
     <Compile Include="Pash\ParserIntrinsics\CaseInsensitiveGrammar.cs" />
     <Compile Include="Pash\ParserIntrinsics\Nodes\command_name_node.cs" />
+    <Compile Include="Pash\ParserIntrinsics\Nodes\decimal_integer_literal_node.cs" />
     <Compile Include="Pash\ParserIntrinsics\Nodes\generic_token_node.cs" />
-    <Compile Include="Pash\ParserIntrinsics\Nodes\literal_node.cs" />
+    <Compile Include="Pash\ParserIntrinsics\Nodes\verbatim_string_literal_node.cs" />
     <Compile Include="Pash\ParserIntrinsics\Nodes\_node.cs" />
     <Compile Include="Pash\ParserIntrinsics\Nodes\parenthesized_expression_node.cs" />
     <Compile Include="Pash\ParserIntrinsics\PowerShellGrammar.cs" />

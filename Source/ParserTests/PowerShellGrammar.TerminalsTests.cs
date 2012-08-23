@@ -51,14 +51,8 @@ namespace ParserTests
         [Test]
         public void VerbatimStringMatch()
         {
-            var matches = Regex.Match("'PS> '", PowerShellGrammar.Terminals.literal.Pattern);
+            var matches = Regex.Match("'PS> '", PowerShellGrammar.Terminals.verbatim_string_characters.Pattern);
             Assert.True(matches.Success);
-            Assert.AreEqual(0, matches.Groups[PowerShellGrammar.Terminals.literal.Name].Index);
-
-            // For any node of Terminal X, you should be able to get `matches.Groups[X]`, which is the whole matched text
-            //
-            // Not normally useful, since you can do `term.text`, but it fits in to the next assert.
-            Assert.AreEqual("'PS> '", matches.Groups[PowerShellGrammar.Terminals.literal.Name].Value);
 
             // How to get the useful value out a terminal. Consider that there are 4 different accepted single-quote
             // characters that could demarcate a string literal, and we really don't care which one you used - 
@@ -67,11 +61,44 @@ namespace ParserTests
         }
 
         [Test]
-        public void IntegerLiteralTest()
+        public void DecimalIntegerLiteralTest()
         {
-            var matches = Regex.Match("17", PowerShellGrammar.Terminals.literal.Pattern);
+            var matches = Regex.Match("17", PowerShellGrammar.Terminals.decimal_integer_literal.Pattern);
             Assert.True(matches.Success);
             Assert.AreEqual(17.ToString(), matches.Groups[PowerShellGrammar.Terminals.decimal_integer_literal.Name].Value);
+        }
+
+        [Test]
+        public void HexIntegerLiteralTest()
+        {
+            var matches = Regex.Match("0x17", PowerShellGrammar.Terminals.hexadecimal_integer_literal.Pattern);
+            Assert.True(matches.Success);
+            Assert.AreEqual("0x17", matches.Groups[PowerShellGrammar.Terminals.hexadecimal_integer_literal.Name].Value);
+        }
+
+        [Test]
+        public void HexIntegerLiteralTest2()
+        {
+            var matches = Regex.Match("0x17", PowerShellGrammar.Terminals.hexadecimal_integer_literal.Pattern);
+            Assert.True(matches.Success);
+            Assert.AreEqual("0x17", matches.Value);
+            Assert.AreEqual("0x17", matches.Groups[PowerShellGrammar.Terminals.hexadecimal_integer_literal.Name].Value);
+        }
+
+        [Test]
+        public void HexIntegerLiteralTest3()
+        {
+            var matches = Regex.Match("0x17", PowerShellGrammar.Terminals.hexadecimal_integer_literal.Pattern);
+            Assert.True(matches.Success);
+            Assert.AreEqual("0x17", matches.Groups[PowerShellGrammar.Terminals.hexadecimal_integer_literal.Name].Value);
+        }
+
+        [Test]
+        public void HEXIntegerLiteralTest()
+        {
+            var matches = Regex.Match("0X17", PowerShellGrammar.Terminals.hexadecimal_integer_literal.Pattern);
+            Assert.True(matches.Success);
+            Assert.AreEqual("0X17", matches.Groups[PowerShellGrammar.Terminals.hexadecimal_integer_literal.Name].Value);
         }
 
         // Simply ensure that the reflection used to initialize these fields actually worked
@@ -85,7 +112,7 @@ namespace ParserTests
         [Test]
         public void TokenizeStringTest()
         {
-            AssertIsFullStringMatch(PowerShellGrammar.Terminals.string_literal.Pattern, "\"PS> \"");
+            AssertIsFullStringMatch(PowerShellGrammar.Terminals.expandable_string_literal.Pattern, "\"PS> \"");
         }
 
         // Use this to confirm that the regex matches greedily enough.

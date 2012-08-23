@@ -41,7 +41,7 @@ namespace ParserTests
             {
                 var grammar = new PowerShellGrammar.InteractiveInput();
                 var languageData = new LanguageData(grammar);
-                Assert.AreEqual(languageData.ErrorLevel, GrammarErrorLevel.NoError);
+                Assert.AreEqual(languageData.ErrorLevel, GrammarErrorLevel.NoError, languageData.Errors.JoinString("\n"));
             }
 
             [Test]
@@ -49,7 +49,7 @@ namespace ParserTests
             {
                 var grammar = new PowerShellGrammar.InteractiveInput();
                 var languageData = new LanguageData(grammar);
-                Assert.Less(languageData.ErrorLevel, GrammarErrorLevel.Info);
+                Assert.Less(languageData.ErrorLevel, GrammarErrorLevel.Info, languageData.Errors.JoinString("\n"));
             }
 
             [Test]
@@ -57,7 +57,7 @@ namespace ParserTests
             {
                 var grammar = new PowerShellGrammar.InteractiveInput();
                 var languageData = new LanguageData(grammar);
-                Assert.Less(languageData.ErrorLevel, GrammarErrorLevel.Warning);
+                Assert.Less(languageData.ErrorLevel, GrammarErrorLevel.Warning, languageData.Errors.JoinString("\n"));
             }
 
             [Test]
@@ -65,7 +65,7 @@ namespace ParserTests
             {
                 var grammar = new PowerShellGrammar.InteractiveInput();
                 var languageData = new LanguageData(grammar);
-                Assert.Less(languageData.ErrorLevel, GrammarErrorLevel.Conflict);
+                Assert.Less(languageData.ErrorLevel, GrammarErrorLevel.Conflict, languageData.Errors.JoinString("\n"));
             }
 
 
@@ -74,7 +74,7 @@ namespace ParserTests
             {
                 var grammar = new PowerShellGrammar.InteractiveInput();
                 var languageData = new LanguageData(grammar);
-                Assert.Less(languageData.ErrorLevel, GrammarErrorLevel.Error);
+                Assert.Less(languageData.ErrorLevel, GrammarErrorLevel.Error, languageData.Errors.JoinString("\n"));
             }
 
 
@@ -83,7 +83,7 @@ namespace ParserTests
             {
                 var grammar = new PowerShellGrammar.InteractiveInput();
                 var languageData = new LanguageData(grammar);
-                Assert.Less(languageData.ErrorLevel, GrammarErrorLevel.InternalError);
+                Assert.Less(languageData.ErrorLevel, GrammarErrorLevel.InternalError, languageData.Errors.JoinString("\n"));
             }
         }
 
@@ -154,11 +154,13 @@ namespace ParserTests
                 grammar.array_literal_expression,
                 grammar.unary_expression,
                 grammar.primary_expression,
-                grammar.value
+                grammar.value,
+                grammar.literal,
+                grammar.string_literal
             );
 
             Assert.AreEqual(0, node.ChildNodes.Count, node.ToString());
-            Assert.AreEqual(PowerShellGrammar.Terminals.literal, node.Term);
+            Assert.AreEqual(PowerShellGrammar.Terminals.expandable_string_literal, node.Term);
         }
 
         static ParseTreeNode VerifyParseTreeSingles(ParseTreeNode node, params NonTerminal[] expected)
@@ -229,10 +231,12 @@ namespace ParserTests
                     grammar.array_literal_expression,
                     grammar.unary_expression,
                     grammar.primary_expression,
-                    grammar.value
+                    grammar.value,
+                    grammar.literal,
+                    grammar.string_literal
                 );
 
-                Assert.AreEqual(PowerShellGrammar.Terminals.literal, leftLiteral.Term);
+                Assert.AreEqual(PowerShellGrammar.Terminals.verbatim_string_literal, leftLiteral.Term);
             }
 
             {
@@ -300,9 +304,12 @@ namespace ParserTests
                 grammar.array_literal_expression,
                 grammar.unary_expression,
                 grammar.primary_expression,
-                grammar.value
+                grammar.value,
+                grammar.literal,
+                grammar.integer_literal
             );
 
+            Assert.AreEqual(PowerShellGrammar.Terminals.decimal_integer_literal, node.Term);
         }
     }
 }

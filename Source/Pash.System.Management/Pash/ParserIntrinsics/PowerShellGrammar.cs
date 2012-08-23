@@ -159,6 +159,15 @@ namespace Pash.ParserIntrinsics
         #endregion
         #endregion
 
+        #region B.1 Lexical grammar
+        #region B.1.8 Literals
+        public readonly NonTerminal literal = null; // Initialized by reflection
+        public readonly NonTerminal integer_literal = null; // Initialized by reflection
+        public readonly NonTerminal real_literal = null; // Initialized by reflection
+        public readonly NonTerminal string_literal = null; // Initialized by reflection
+        #endregion
+        #endregion
+
         public class ScriptFile : PowerShellGrammar
         {
             public ScriptFile()
@@ -203,6 +212,34 @@ namespace Pash.ParserIntrinsics
 
         public void InitializeProductionRules()
         {
+
+            #region B.1 Lexical grammar
+            // this was presented as part of the lexical grammar, but I'd rather see this as production rules than 
+            // as regex patterns.
+
+            #region B.1.8 Literals
+            ////        literal:
+            ////            integer_literal
+            ////            real_literal
+            ////            string_literal
+            // TODO: add real_literal 
+            literal.Rule = integer_literal | string_literal;
+
+            ////        integer_literal:
+            ////            decimal_integer_literal
+            ////            hexadecimal_integer_literal
+            integer_literal.Rule = Terminals.decimal_integer_literal | Terminals.hexadecimal_integer_literal;
+
+            ////        string_literal:
+            ////            expandable_string_literal
+            ////            expandable_here_string_literal
+            ////            verbatim_string_literal
+            ////            verbatim_here_string_literal
+            string_literal.Rule = Terminals.expandable_string_literal | Terminals.verbatim_string_literal;
+            #endregion
+            #endregion
+
+
             #region B.2 Syntactic grammar
 
             #region B.2.1 Basic concepts
@@ -563,7 +600,7 @@ namespace Pash.ParserIntrinsics
             ////            type_literal
             ////            variable
             // TODO: more
-            value.Rule = parenthesized_expression | Terminals.literal;
+            value.Rule = parenthesized_expression | literal;
 
             ////        parenthesized_expression:
             ////            (   new_lines_opt   pipeline   new_lines_opt   )
