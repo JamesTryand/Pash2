@@ -96,7 +96,7 @@ namespace ParserTests
         [Test]
         public void HEXIntegerLiteralTest()
         {
-            var matches = Regex.Match("0X17", PowerShellGrammar.Terminals.hexadecimal_integer_literal.Pattern);
+            var matches = Regex.Match("0X17", PowerShellGrammar.Terminals.hexadecimal_integer_literal.Pattern, RegexOptions.IgnoreCase);
             Assert.True(matches.Success);
             Assert.AreEqual("0X17", matches.Groups[PowerShellGrammar.Terminals.hexadecimal_integer_literal.Name].Value);
         }
