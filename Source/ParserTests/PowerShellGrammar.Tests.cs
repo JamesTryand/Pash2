@@ -271,5 +271,38 @@ namespace ParserTests
                 Assert.AreEqual("Get-Location", command_name_token.FindTokenAndGetText());
             }
         }
+
+        [Test]
+        public void NumberOverCommandTest()
+        {
+            var grammar = new PowerShellGrammar.InteractiveInput();
+
+            var parser = new Parser(grammar);
+            var parseTree = parser.Parse("1");
+
+            Assert.IsNotNull(parseTree);
+            Assert.IsFalse(parseTree.HasErrors, parseTree.ParserMessages.JoinString("\n"));
+
+            var node = VerifyParseTreeSingles(parseTree.Root,
+                grammar.interactive_input,
+                grammar.script_block,
+                grammar.script_block_body,
+                grammar.statement_list,
+                grammar.statement,
+                grammar.pipeline,
+                grammar.expression,
+                grammar.logical_expression,
+                grammar.bitwise_expression,
+                grammar.comparison_expression,
+                grammar.additive_expression,
+                grammar.multiplicative_expression,
+                grammar.format_expression,
+                grammar.array_literal_expression,
+                grammar.unary_expression,
+                grammar.primary_expression,
+                grammar.value
+            );
+
+        }
     }
 }
