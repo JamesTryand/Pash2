@@ -22,6 +22,13 @@ namespace ParserTests
         }
 
         [Test]
+        public void CaseInsensitiveTest()
+        {
+            var grammar = new PowerShellGrammar.InteractiveInput();
+            Assert.True(!grammar.CaseSensitive);
+        }
+
+        [Test]
         public void NonTerminalFieldsInitializedTest()
         {
             // created by reflection (to avoid missing one)
