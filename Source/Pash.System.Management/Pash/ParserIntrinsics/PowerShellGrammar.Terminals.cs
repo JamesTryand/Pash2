@@ -23,7 +23,6 @@ namespace Pash.ParserIntrinsics
         {
             static Terminals()
             {
-                // this might be an excessive use of query comprehension syntax
                 var q = from field in typeof(PowerShellGrammar.Terminals).GetFields()
                         where field.FieldType == typeof(RegexBasedTerminal)
                         select field;
