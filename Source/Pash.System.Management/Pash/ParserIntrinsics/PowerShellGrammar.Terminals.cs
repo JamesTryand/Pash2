@@ -26,16 +26,20 @@ namespace Pash.ParserIntrinsics
                 // this might be an excessive use of query comprehension syntax
                 var q = from field in typeof(PowerShellGrammar.Terminals).GetFields()
                         where field.FieldType == typeof(RegexBasedTerminal)
-                        let patternFieldName = field.Name + "_pattern"
-                        let patternFieldInfo = typeof(PowerShellGrammar.Terminals).GetField(patternFieldName, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static)
-                        let pattern = (string)patternFieldInfo.GetValue(null)
-                        select new { field, pattern };
+                        select field;
 
-                foreach (var x in q)
+                foreach (var field in q)
                 {
-                    var regexBasedTerminal = new RegexBasedTerminal(x.field.Name, x.pattern);
+                    var patternFieldInfo = typeof(PowerShellGrammar.Terminals).GetField(
+                        field.Name + "_pattern",
+                        BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static
+                        );
+
+                    var pattern = (string)patternFieldInfo.GetValue(null);
+
+                    var regexBasedTerminal = new RegexBasedTerminal(field.Name, pattern);
                     regexBasedTerminal.Flags |= TermFlags.NoAstNode;
-                    x.field.SetValue(null, regexBasedTerminal);
+                    field.SetValue(null, regexBasedTerminal);
                 }
 
                 // TODO: find a more clever way than writing this here,
