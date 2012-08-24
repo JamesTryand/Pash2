@@ -22,7 +22,7 @@ namespace Pash.ParserIntrinsics.Nodes
 
         internal override object Execute(ExecutionContext context, ICommandRuntime commandRuntime)
         {
-                var commandText = parseTreeNode.FindTokenAndGetText();
+                var commandText = parseTreeNode.ChildNodes[0].FindTokenAndGetText();
                 CommandInfo commandInfo = ((LocalRunspace)context.CurrentRunspace).CommandManager.FindCommand(commandText);
 
                 if (commandInfo == null)
