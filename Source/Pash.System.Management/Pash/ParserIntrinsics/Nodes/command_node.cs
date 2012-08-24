@@ -10,12 +10,12 @@ using System.Management.Automation.Runspaces;
 
 namespace Pash.ParserIntrinsics.Nodes
 {
-    public class command_name_node : _node
+    public class command_node : _node
     {
         bool _bExecuted = false;
         private System.Collections.ObjectModel.Collection<PSObject> _results;
 
-        public command_name_node(AstContext astContext, ParseTreeNode parseTreeNode)
+        public command_node(AstContext astContext, ParseTreeNode parseTreeNode)
             : base(astContext, parseTreeNode)
         {
         }

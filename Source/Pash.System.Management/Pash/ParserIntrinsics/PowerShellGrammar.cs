@@ -457,6 +457,7 @@ namespace Pash.ParserIntrinsics
             ////            command_invocation_operator   command_module_opt  command_name_expr   command_elements_opt
             // TODO: more
             command.Rule = command_name + (command_elements | Empty);
+            command.AstConfig.NodeType = typeof(command_node);
 
             ////        command_invocation_operator:  one of
             ////            &	.
@@ -467,7 +468,6 @@ namespace Pash.ParserIntrinsics
             ////            generic_token_with_subexpr
             // TODO: more
             command_name.Rule = Terminals.generic_token;
-            command_name.AstConfig.NodeType = typeof(command_name_node);
 
             ////        generic_token_with_subexpr:
             ////            No whitespace is allowed between ) and command_name.
