@@ -237,7 +237,7 @@
     <Compile Include="Pash\ParserIntrinsics\Nodes\parenthesized_expression_node.cs" />
     <Compile Include="Pash\ParserIntrinsics\PowerShellGrammar.cs" />
     <Compile Include="Pash\ParserIntrinsics\PowerShellGrammar.Terminals.cs" />
-    <Compile Include="Pash\ParserIntrinsics\StringExtensions.cs" />
+    <Compile Include="Extensions\String.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

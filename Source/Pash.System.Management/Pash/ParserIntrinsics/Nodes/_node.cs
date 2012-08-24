@@ -1,6 +1,6 @@
 using System;
 using System.Linq;
-using StringExtensions;
+using Extensions.String;
 using System.Management.Automation;
 using Pash.Implementation;
 using Irony.Ast;

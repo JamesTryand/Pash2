@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using NUnit.Framework;
 using Irony.Parsing;
-using StringExtensions;
+using Extensions.String;
 using Pash.ParserIntrinsics;
 
 namespace ParserTests
