@@ -340,7 +340,19 @@ namespace ParserTests
             );
 
             Assert.AreEqual(2, commandNode.ChildNodes.Count, commandNode.ToString());
+            Assert.AreEqual(grammar.command_name, commandNode.ChildNodes[0].Term);
 
+            var parametersNode = commandNode.ChildNodes[1];
+
+            var node = VerifyParseTreeSingles(parametersNode,
+                grammar.command_elements,
+                grammar.command_element,
+                grammar.command_argument,
+                grammar.command_name_expr,
+                grammar.command_name
+                );
+
+            Assert.AreEqual(PowerShellGrammar.Terminals.generic_token, node.Term);
         }
     }
 }
