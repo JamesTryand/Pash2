@@ -46,6 +46,8 @@ namespace Pash.ParserIntrinsics
                 verbatim_string_literal.AstConfig.NodeType = typeof(verbatim_string_literal_node);
                 decimal_integer_literal.Flags &= ~(TermFlags.NoAstNode);
                 decimal_integer_literal.AstConfig.NodeType = typeof(decimal_integer_literal_node);
+                hexadecimal_integer_literal.Flags &= ~(TermFlags.NoAstNode);
+                hexadecimal_integer_literal.AstConfig.NodeType = typeof(hexadecimal_integer_literal_node);
 
                 // I'd rather that any other token be selected over `generic_token`, since it's, you know, generic.
                 generic_token.Priority = -1;
