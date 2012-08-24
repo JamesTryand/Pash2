@@ -456,7 +456,7 @@ namespace Pash.ParserIntrinsics
             ////            command_name   command_elements_opt
             ////            command_invocation_operator   command_module_opt  command_name_expr   command_elements_opt
             // TODO: more
-            command.Rule = command_name;
+            command.Rule = command_name + (command_elements | Empty);
 
             ////        command_invocation_operator:  one of
             ////            &	.
@@ -475,15 +475,24 @@ namespace Pash.ParserIntrinsics
             ////        command_name_expr:
             ////            command_name
             ////            primary_expression
+            command_name_expr.Rule = command_name | primary_expression;
+
             ////        command_elements:
             ////            command_element
             ////            command_elements   command_element
+            command_elements.Rule = MakePlusRule(command_elements, command_element);
+
             ////        command_element:
             ////            command_parameter
             ////            command_argument
             ////            redirection
+            // TODO: more
+            command_element.Rule = command_argument;
+
             ////        command_argument:
             ////            command_name_expr
+            command_argument.Rule = command_name_expr;
+
             ////        redirections:
             ////            redirection
             ////            redirections   redirection

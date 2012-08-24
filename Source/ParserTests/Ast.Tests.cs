@@ -115,5 +115,19 @@ namespace ParserTests
             Assert.IsInstanceOf<int>(result, "Result is '{0}'", result);
             Assert.AreEqual(17, result);
         }
+
+        [Test]
+        public void ParametersTest()
+        {
+            var grammar = new PowerShellGrammar.InteractiveInput();
+
+            var parser = new Parser(grammar);
+            var parseTree = parser.Parse(@"Set-Location C:\Windows");
+
+            Assert.IsNotNull(parseTree);
+            Assert.IsFalse(parseTree.HasErrors, parseTree.ParserMessages.JoinString("\n"));
+
+
+        }
     }
 }
