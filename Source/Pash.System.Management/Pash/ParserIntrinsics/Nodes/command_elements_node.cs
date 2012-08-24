@@ -19,9 +19,9 @@ namespace Pash.ParserIntrinsics.Nodes
         {
         }
 
-        internal override object GetValue(ExecutionContext context)
+        internal override object Execute(ExecutionContext context, ICommandRuntime commandRuntime)
         {
-            return parseTreeNode.ChildNodes.Select(node => ((_node)node.AstNode).GetValue(context));
+            return parseTreeNode.ChildNodes.Select(node => ((_node)node.AstNode).Execute(context, commandRuntime));
         }
     }
 }

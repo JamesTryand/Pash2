@@ -7,23 +7,21 @@ using Irony.Parsing;
 using Pash.Implementation;
 using System.Management.Automation;
 using System.Management.Automation.Runspaces;
+using System.Collections.ObjectModel;
 
 namespace Pash.ParserIntrinsics.Nodes
 {
     public class command_node : _node
     {
-        bool _bExecuted = false;
-        private System.Collections.ObjectModel.Collection<PSObject> _results;
+        private Collection<PSObject> _results;
 
         public command_node(AstContext astContext, ParseTreeNode parseTreeNode)
             : base(astContext, parseTreeNode)
         {
         }
 
-        internal override object GetValue(Implementation.ExecutionContext context)
+        internal override object Execute(ExecutionContext context, ICommandRuntime commandRuntime)
         {
-            if (!_bExecuted)
-            {
                 var commandText = parseTreeNode.FindTokenAndGetText();
                 CommandInfo commandInfo = ((LocalRunspace)context.CurrentRunspace).CommandManager.FindCommand(commandText);
 
@@ -42,17 +40,13 @@ namespace Pash.ParserIntrinsics.Nodes
                 {
                     // TODO: implement command invoke
                     pipeline.Commands.Add(commandText);
-                    _results = pipeline.Invoke();
+                    return pipeline.Invoke();
                 }
                 finally
                 {
                     context.PopPipeline();
                 }
 
-                _bExecuted = true;
-            }
-
-            return _results;
         }
     }
 }
