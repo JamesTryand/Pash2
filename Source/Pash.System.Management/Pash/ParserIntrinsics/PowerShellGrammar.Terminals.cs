@@ -8,6 +8,7 @@ using System.Text;
 using System.Reflection;
 using System.Diagnostics;
 using Pash.ParserIntrinsics.Nodes;
+using Extensions.Reflection;
 
 namespace Pash.ParserIntrinsics
 {
@@ -33,24 +34,21 @@ namespace Pash.ParserIntrinsics
                         field.Name + "_pattern",
                         BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static
                         );
-
-                    var pattern = (string)patternFieldInfo.GetValue(null);
-
+                    var pattern = patternFieldInfo.GetValue<string>(null);
                     var regexBasedTerminal = new RegexBasedTerminal(field.Name, pattern);
-                    regexBasedTerminal.Flags |= TermFlags.NoAstNode;
+
+                    var nodeType = Assembly.GetCallingAssembly().GetType("Pash.ParserIntrinsics.Nodes." + field.Name + "_node");
+                    if (nodeType == null)
+                    {
+                        regexBasedTerminal.Flags |= TermFlags.NoAstNode;
+                    }
+                    else
+                    {
+                        regexBasedTerminal.AstConfig.NodeType = nodeType;
+                    }
+
                     field.SetValue(null, regexBasedTerminal);
                 }
-
-                // TODO: find a more clever way than writing this here,
-                // especially if we can skip the bit fiddling.
-                generic_token.Flags &= ~(TermFlags.NoAstNode);
-                generic_token.AstConfig.NodeType = typeof(generic_token_node);
-                verbatim_string_literal.Flags &= ~(TermFlags.NoAstNode);
-                verbatim_string_literal.AstConfig.NodeType = typeof(verbatim_string_literal_node);
-                decimal_integer_literal.Flags &= ~(TermFlags.NoAstNode);
-                decimal_integer_literal.AstConfig.NodeType = typeof(decimal_integer_literal_node);
-                hexadecimal_integer_literal.Flags &= ~(TermFlags.NoAstNode);
-                hexadecimal_integer_literal.AstConfig.NodeType = typeof(hexadecimal_integer_literal_node);
 
                 // I'd rather that any other token be selected over `generic_token`, since it's, you know, generic.
                 generic_token.Priority = -1;
