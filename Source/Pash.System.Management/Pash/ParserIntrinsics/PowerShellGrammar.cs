@@ -6,6 +6,7 @@ using Irony.Parsing;
 using System.Text.RegularExpressions;
 using System.Text;
 using Pash.ParserIntrinsics.Nodes;
+using System.Reflection;
 
 namespace Pash.ParserIntrinsics
 {
@@ -457,7 +458,6 @@ namespace Pash.ParserIntrinsics
             ////            command_invocation_operator   command_module_opt  command_name_expr   command_elements_opt
             // TODO: more
             command.Rule = command_name + (command_elements | Empty);
-            command.AstConfig.NodeType = typeof(command_node);
 
             ////        command_invocation_operator:  one of
             ////            &	.
@@ -540,7 +540,6 @@ namespace Pash.ParserIntrinsics
             additive_expression.Rule =
                 multiplicative_expression |
                 (additive_expression + "+" + (Terminals.new_lines | Empty) + multiplicative_expression);
-            additive_expression.AstConfig.NodeType = typeof(additive_expression_node);
 
             ////        multiplicative_expression:
             ////            format_expression
@@ -614,7 +613,6 @@ namespace Pash.ParserIntrinsics
             ////        parenthesized_expression:
             ////            (   new_lines_opt   pipeline   new_lines_opt   )
             parenthesized_expression.Rule = ToTerminal("(") + (Terminals.new_lines | Empty) + pipeline + (Terminals.new_lines | Empty) + ")";
-            parenthesized_expression.AstConfig.NodeType = typeof(parenthesized_expression_node);
 
             ////        sub_expression:
             ////            $(   new_lines_opt   statement_list_opt   new_lines_opt   )
@@ -745,8 +743,20 @@ namespace Pash.ParserIntrinsics
             foreach (var field in this.GetType().GetFields().Where(f => f.FieldType == typeof(NonTerminal)))
             {
                 if (field.GetValue(this) != null) throw new Exception("don't pre-init fields - let us take care of that for you.");
+
                 var nonTerminal = new NonTerminal(field.Name);
-                nonTerminal.AstConfig.NodeType = typeof(_node); // default; many will be overridden.
+
+                var nodeType = Assembly.GetCallingAssembly().GetType("Pash.ParserIntrinsics.Nodes." + field.Name + "_node");
+                if (nodeType == null)
+                {
+                    nonTerminal.AstConfig.NodeType = typeof(_node); // default that delegates to children
+                }
+                else
+                {
+                    nonTerminal.AstConfig.NodeType = nodeType;
+                }
+
+
                 field.SetValue(this, nonTerminal);
             }
         }
