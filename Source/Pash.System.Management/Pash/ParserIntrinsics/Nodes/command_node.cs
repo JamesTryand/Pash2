@@ -28,18 +28,29 @@ namespace Pash.ParserIntrinsics.Nodes
                 if (commandInfo == null)
                     throw new InvalidOperationException(commandText);
 
+                IEnumerable<CommandParameter> parameters = new CommandParameter[]{};
+                if (parseTreeNode.ChildNodes.Count == 2)
+                {
+                    var commandElementsNode = (command_elements_node)parseTreeNode.ChildNodes[1].AstNode;
+                    parameters = (IEnumerable<CommandParameter>)commandElementsNode.Execute(context, commandRuntime);
+                }
+
                 // MUST: fix this with the commandRuntime
                 Pipeline pipeline = context.CurrentRunspace.CreateNestedPipeline();
 
-                // Fill the pipeline with input data
-                pipeline.Input.Write(context.inputStreamReader);
+                // TODO: Fill the pipeline with input data?
+                //pipeline.Input.Write(context.inputStreamReader);
 
                 context.PushPipeline(pipeline);
 
                 try
                 {
-                    // TODO: implement command invoke
-                    pipeline.Commands.Add(commandText);
+                    var command = new Command(commandText);
+                    foreach (var parameter in parameters)
+                    {
+                        command.Parameters.Add(parameter);
+                    }
+                    pipeline.Commands.Add(command);
                     return pipeline.Invoke();
                 }
                 finally
