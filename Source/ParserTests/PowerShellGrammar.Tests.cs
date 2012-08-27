@@ -386,5 +386,27 @@ namespace ParserTests
             Assert.AreEqual(PowerShellGrammar.Terminals.assignment_operator, assignementNode.ChildNodes[1].Term);
             Assert.AreEqual(grammar.statement, assignementNode.ChildNodes[2].Term);
         }
+
+        [Test]
+        public void PipelineTest()
+        {
+            
+            var grammar = new PowerShellGrammar.InteractiveInput();
+
+            var parser = new Parser(grammar);
+            var parseTree = parser.Parse("prompt | write-host -nonewline");
+
+            Assert.IsNotNull(parseTree);
+            Assert.IsFalse(parseTree.HasErrors, parseTree.ParserMessages.JoinString("\n"));
+
+            var assignementNode = VerifyParseTreeSingles(parseTree.Root,
+                grammar.interactive_input,
+                grammar.script_block,
+                grammar.script_block_body,
+                grammar.statement_list,
+                grammar.statement,
+                grammar.pipeline
+                );
+        }
     }
 }
