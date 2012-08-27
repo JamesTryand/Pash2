@@ -399,14 +399,25 @@ namespace ParserTests
             Assert.IsNotNull(parseTree);
             Assert.IsFalse(parseTree.HasErrors, parseTree.ParserMessages.JoinString("\n"));
 
-            var assignementNode = VerifyParseTreeSingles(parseTree.Root,
+            var pipelineNode = VerifyParseTreeSingles(parseTree.Root,
                 grammar.interactive_input,
                 grammar.script_block,
                 grammar.script_block_body,
                 grammar.statement_list,
-                grammar.statement,
-                grammar.pipeline
+                grammar.statement
                 );
+
+            Assert.AreEqual(grammar.pipeline, pipelineNode.Term);
+            Assert.AreEqual(2, pipelineNode.ChildNodes.Count, pipelineNode.ToString());
+
+            VerifyParseTreeSingles(pipelineNode.ChildNodes[0],
+                grammar.command,
+                grammar.command_name
+                );
+
+            var pipelineTailNode = pipelineNode.ChildNodes[1];
+            Assert.AreEqual(grammar.pipeline_tail, pipelineTailNode.Term);
+            Assert.AreEqual(2, pipelineTailNode.ChildNodes.Count);
         }
     }
 }
