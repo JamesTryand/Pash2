@@ -98,21 +98,22 @@ namespace System.Management.Automation
         private void BindArgument(string name, object value, Type type)
         {
             // TODO: extract this into a method
-            PropertyInfo pi = Command.GetType().GetProperty(name, type);
+            PropertyInfo propertyInfo = Command.GetType().GetProperty(name, type);
+
             // TODO: make this generic
-            if (pi.PropertyType == typeof(PSObject[]))
+            if (propertyInfo.PropertyType == typeof(PSObject[]))
             {
-                PSObject[] arr = new PSObject[] { PSObject.AsPSObject(value) };
-                pi.SetValue(Command, arr, null);
+                propertyInfo.SetValue(Command, new[] { PSObject.AsPSObject(value) }, null);
             }
-            else if (pi.PropertyType == typeof(String[]))
+
+            else if (propertyInfo.PropertyType == typeof(String[]))
             {
-                String[] arr = new String[] { value.ToString() };
-                pi.SetValue(Command, arr, null);
+                propertyInfo.SetValue(Command, new[] { value.ToString() }, null);
             }
+
             else
             {
-                pi.SetValue(Command, value, null);
+                propertyInfo.SetValue(Command, value, null);
             }
         }
 
