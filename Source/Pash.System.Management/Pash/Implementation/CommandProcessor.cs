@@ -111,6 +111,11 @@ namespace System.Management.Automation
                 propertyInfo.SetValue(Command, new[] { value.ToString() }, null);
             }
 
+            else if (propertyInfo.PropertyType == typeof(String))
+            {
+                propertyInfo.SetValue(Command, value.ToString(), null);
+            }
+
             else
             {
                 propertyInfo.SetValue(Command, value, null);
