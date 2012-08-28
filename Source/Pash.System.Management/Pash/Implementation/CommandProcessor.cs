@@ -77,23 +77,7 @@ namespace System.Management.Automation
 
                         if (paramInfo != null)
                         {
-                            // TODO: extract this into a method
-                            PropertyInfo pi = Command.GetType().GetProperty(paramInfo.Name, paramInfo.ParameterType);
-                            // TODO: make this generic
-                            if (pi.PropertyType == typeof(PSObject[]))
-                            {
-                                PSObject[] arr = new PSObject[] { PSObject.AsPSObject(parameter.Value) };
-                                pi.SetValue(Command, arr, null);
-                            }
-                            else if (pi.PropertyType == typeof(String[]))
-                            {
-                                String[] arr = new String[] { parameter.Value.ToString() };
-                                pi.SetValue(Command, arr, null);
-                            }
-                            else
-                            {
-                                pi.SetValue(Command, parameter.Value, null);
-                            }
+                            BindArgument(paramInfo.Name, parameter.Value, paramInfo.ParameterType);
                         }
                     }
                     else
@@ -108,6 +92,27 @@ namespace System.Management.Automation
                         }
                     }
                 }
+            }
+        }
+
+        private void BindArgument(string name, object value, Type type)
+        {
+            // TODO: extract this into a method
+            PropertyInfo pi = Command.GetType().GetProperty(name, type);
+            // TODO: make this generic
+            if (pi.PropertyType == typeof(PSObject[]))
+            {
+                PSObject[] arr = new PSObject[] { PSObject.AsPSObject(value) };
+                pi.SetValue(Command, arr, null);
+            }
+            else if (pi.PropertyType == typeof(String[]))
+            {
+                String[] arr = new String[] { value.ToString() };
+                pi.SetValue(Command, arr, null);
+            }
+            else
+            {
+                pi.SetValue(Command, value, null);
             }
         }
 
