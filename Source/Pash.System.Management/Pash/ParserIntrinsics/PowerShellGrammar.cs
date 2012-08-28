@@ -455,7 +455,11 @@ namespace Pash.ParserIntrinsics
             ////        pipeline_tail:
             ////            |   new_lines_opt   command
             ////            |   new_lines_opt   command   pipeline_tail
-            pipeline_tail.Rule = ToTerminal("|") + (Terminals.new_lines | Empty) + command + (pipeline_tail | Empty);
+            {
+                var pipeTerminal = ToTerminal("|");
+                pipeTerminal.SetFlag(TermFlags.NoAstNode | TermFlags.IsTransient);
+                pipeline_tail.Rule = pipeTerminal + (Terminals.new_lines | Empty) + command + (pipeline_tail | Empty);
+            }
 
             ////        command:
             ////            command_name   command_elements_opt

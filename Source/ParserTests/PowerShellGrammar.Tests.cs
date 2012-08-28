@@ -417,7 +417,7 @@ namespace ParserTests
 
             var pipelineTailNode = pipelineNode.ChildNodes[1];
             Assert.AreEqual(grammar.pipeline_tail, pipelineTailNode.Term);
-            Assert.AreEqual(2, pipelineTailNode.ChildNodes.Count);
+            Assert.AreEqual(1, pipelineTailNode.ChildNodes.Count);
         }
     }
 }

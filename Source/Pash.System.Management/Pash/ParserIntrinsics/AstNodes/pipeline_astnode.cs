@@ -20,9 +20,31 @@ namespace Pash.ParserIntrinsics.AstNodes
 
         internal override object Execute(ExecutionContext context, ICommandRuntime commandRuntime)
         {
-            if (this.parseTreeNode.ChildNodes.Count == 1) { return ((_astnode)this.parseTreeNode.ChildNodes.Single().AstNode).Execute(context, commandRuntime); }
+            if (this.parseTreeNode.ChildNodes.Count == 1)
+            {
+                return ((_astnode)this.parseTreeNode.ChildNodes.Single().AstNode).Execute(context, commandRuntime);
+            }
+
+            if (this.parseTreeNode.ChildNodes.Count == 2)
+            {
+                // TODO: rewrite this - it should expand the commands in the original pipe
+
+                ExecutionContext subContext = context.CreateNestedContext();
+                subContext.inputStreamReader = context.inputStreamReader;
+
+                PipelineCommandRuntime subRuntime = new PipelineCommandRuntime(((PipelineCommandRuntime)commandRuntime).pipelineProcessor);
+
+                var results = ((_astnode)this.parseTreeNode.ChildNodes[0].AstNode).Execute(subContext, subRuntime);
+
+                subContext = context.CreateNestedContext();
+                subContext.inputStreamReader = new PSObjectPipelineReader(new[] { results });
+
+                subRuntime = new PipelineCommandRuntime(((PipelineCommandRuntime)commandRuntime).pipelineProcessor);
+                return ((_astnode)this.parseTreeNode.ChildNodes[1].AstNode).Execute(subContext, subRuntime);
+            }
 
             throw new NotImplementedException();
+
         }
     }
 }
