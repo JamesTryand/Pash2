@@ -55,9 +55,7 @@ namespace System.Management.Automation
                 {
                     if (paramInfo.ValueFromPipeline)
                     {
-                        // TODO: extract this into a method
-                        PropertyInfo pi = Command.GetType().GetProperty(paramInfo.Name, paramInfo.ParameterType);
-                        pi.SetValue(Command, obj, null);
+                        BindArgument(paramInfo.Name, obj, paramInfo.ParameterType);
                     }
                 }
             }
@@ -86,9 +84,7 @@ namespace System.Management.Automation
 
                         if (paramInfo != null)
                         {
-                            // TODO: extract this into a method
-                            PropertyInfo pi = Command.GetType().GetProperty(paramInfo.Name, paramInfo.ParameterType);
-                            pi.SetValue(Command, parameter.Value, null);
+                            BindArgument(paramInfo.Name, parameter.Value, paramInfo.ParameterType);
                         }
                     }
                 }
