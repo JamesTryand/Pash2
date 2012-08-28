@@ -82,17 +82,17 @@ namespace System.Management.Automation
                             // TODO: make this generic
                             if (pi.PropertyType == typeof(PSObject[]))
                             {
-                                PSObject[] arr = new PSObject[] { PSObject.AsPSObject(Parameters[i].Value) };
+                                PSObject[] arr = new PSObject[] { PSObject.AsPSObject(parameter.Value) };
                                 pi.SetValue(Command, arr, null);
                             }
                             else if (pi.PropertyType == typeof(String[]))
                             {
-                                String[] arr = new String[] { Parameters[i].Value.ToString() };
+                                String[] arr = new String[] { parameter.Value.ToString() };
                                 pi.SetValue(Command, arr, null);
                             }
                             else
                             {
-                                pi.SetValue(Command, Parameters[i].Value, null);
+                                pi.SetValue(Command, parameter.Value, null);
                             }
                         }
                     }
@@ -104,7 +104,7 @@ namespace System.Management.Automation
                         {
                             // TODO: extract this into a method
                             PropertyInfo pi = Command.GetType().GetProperty(paramInfo.Name, paramInfo.ParameterType);
-                            pi.SetValue(Command, Parameters[i].Value, null);
+                            pi.SetValue(Command, parameter.Value, null);
                         }
                     }
                 }
